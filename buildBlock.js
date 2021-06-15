@@ -25,7 +25,7 @@ var stopAll = false;
 function calculateAll_withoutParnet() {
     for (var i = 0; i < data.tx_id_array_withoutParent.length; i++) {
 
-        if (data.tx_id_array_withoutParent[i].weight + currentWeight < data.metaData.maxWeight && !tx_id_Map.has( data.tx_id_array_withoutParent[i].tx_id ) ) {
+        if (data.tx_id_array_withoutParent[i].weight + currentWeight < data.metaData.maxWeight && !tx_id_Map.has(data.tx_id_array_withoutParent[i].tx_id)) {
 
             tx_id_Map.set(data.tx_id_array_withoutParent[i].tx_id, true);
             tx_id_Map_withoutParent.set(data.tx_id_array_withoutParent[i].tx_id, { "fee": data.tx_id_array_withoutParent[i].fee, "weight": data.tx_id_array_withoutParent[i].weight, "isCompleted": true, "parents": data.tx_id_array_withoutParent[i].parents });
@@ -155,17 +155,17 @@ function calculate_Parent(parentElement) {
 }
 
 function calculateAll() {
-  
+
     calculateAll_withoutParnet();
     if (!stopAll) {
         calculateAll_withParnet();
     }
 
     fs.writeFile('block.txt', printSeqID.join('\n'), (err) => {
-      
+
         // In case of a error throw err.
         if (err) throw err;
-    })
+    });
 
     console.log("TotalWeight:" + currentWeight);
     console.log("TotalFee:" + currentValue);
@@ -173,3 +173,71 @@ function calculateAll() {
 }
 
 calculateAll();
+
+//knapSack test
+var testArr1 = [];
+var testArr2 = [];
+for (var i = 0; i < data.metaData.maxWeight; i++) {
+    testArr1.push(0);
+    testArr2.push(0);
+}
+//test ends here
+
+//knapsack Test
+
+function calculate_withKnapsack() {
+
+    var localFee = 0;
+    var localWeight = 0;
+    var iPlace = 1;
+    while (true) {
+        for (var j = 0; j < data.metaData.maxWeight; j++) {
+            testArr2[j] = testArr1[j];
+            if (true) {
+                
+            }
+        }
+        //copy to first one
+    }
+
+}
+
+//calculate_withKnapsack();
+//test ends here
+
+
+
+
+
+//leastWeight Test
+var leastWeightSeq = [];
+function calculateAll_withoutParnet_withLeastWeight() {
+    console.log("FUNCTION CALLED");
+    var localWeight = 0, localFee = 0;
+    data.tx_id_array_withoutParent.sort(function (a, b) {
+        return a.weight - b.weight;
+    });
+    //console.log("Sorted Array:",data.tx_id_array_withoutParent);
+    console.log("AL RECORDS");
+    for (var i = 0; i < data.tx_id_array_withoutParent.length; i++) {
+        if (localWeight + data.tx_id_array_withoutParent[i].weight <= data.metaData.maxWeight) {
+            leastWeightSeq.push(data.tx_id_array_withoutParent[i].tx_id);
+            localWeight += data.tx_id_array_withoutParent[i].weight;
+            localFee += data.tx_id_array_withoutParent[i].fee;
+        } else {
+            break;
+        }
+
+    }
+    console.log("Local FEE:", localFee);
+    console.log("Local Weight", localWeight);
+
+    fs.writeFile('block.txt', leastWeightSeq.join('\n'), (err) => {
+
+        // In case of a error throw err.
+        if (err) throw err;
+    });
+
+}
+
+//calculateAll_withoutParnet_withLeastWeight();
